@@ -1,0 +1,33 @@
+{
+  "debug": true,
+  "products": [
+    {
+      "name": "话费50",
+      "type": "ccb",
+      "url": "http://jf.ccb.com/exchangecenter/product/materialproductdetail.jhtml?productId=1000000000003783",
+      "threshold": 0,
+      "enable": true
+    },
+    {
+      "name": "汽车卡加油100",
+      "type": "ccb",
+      "url": "http://jf.ccb.com/exchangecenter/product/materialproductdetail.jhtml?productId=1000000000005053",
+      "threshold": 0,
+      "enable": true
+    },
+    {
+      "name": "话费100",
+      "type": "ccb",
+      "url": "http://jf.ccb.com/exchangecenter/product/materialproductdetail.jhtml?productId=1000000000003784",
+      "threshold": 0,
+      "enable": true
+    },
+    {
+      "name": "话费10",
+      "type": "ccb",
+      "url": "http://jf.ccb.com/exchangecenter/product/materialproductdetail.jhtml?productId=1000000000003782",
+      "threshold": 0,
+      "enable": true
+    }
+  ]
+}
