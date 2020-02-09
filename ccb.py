@@ -3,6 +3,7 @@ import json
 import time
 
 from requests_html import HTMLSession
+from pyppeteer.errors import TimeoutError
 
 products = list()
 with open("config.json", 'r', encoding='UTF-8') as f:
@@ -28,15 +29,15 @@ class CcbMonitor:
                     "stock_quantity": 0,
                     "product_points": 99999,
                     "card_type": ""}
-        r = self.sess.get(target_url)
-        r.html.render(sleep=2, timeout=1000)
         try:
+            r = self.sess.get(target_url)
+            r.html.render(sleep=2, timeout=60)
             res_dict["name"] = r.html.find('div.prd_top_info > p.prd_top_title', first=True).text
             res_dict["stock_quantity"] = int(r.html.find('#pint', first=True).text)
             res_dict["product_points"] = int(r.html.find('li.product-points > span', first=True).text)
             # 兑换卡种
             res_dict["card_type"] = r.html.find('li.card-type', first=True).text[6:]
-        except AttributeError:
+        except (AttributeError, TimeoutError):
             pass
         return res_dict
 
