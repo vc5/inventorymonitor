@@ -16,9 +16,11 @@ jobs:
     - name: Setup Python environment
       uses: actions/setup-python@v1.1.1
       with:
-        python-version: 3.7
+        python-version: 3.7.4
     - name: Install lib
       run: pip install -r ./requirements.txt
+    - name: lib2
+      run: pip install websockets==6.0 --force-reinstall
     - name: run script
       env:
         BARK_KEY: ${{ secrets.BARK_KEY }}
