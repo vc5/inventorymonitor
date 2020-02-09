@@ -29,7 +29,7 @@ class CcbMonitor:
                     "product_points": 99999,
                     "card_type": ""}
         r = self.sess.get(target_url)
-        r.html.render(sleep=2, timeout=100)
+        r.html.render(sleep=2, timeout=10000)
         try:
             res_dict["name"] = r.html.find('div.prd_top_info > p.prd_top_title', first=True).text
             res_dict["stock_quantity"] = int(r.html.find('#pint', first=True).text)
