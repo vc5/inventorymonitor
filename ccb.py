@@ -29,7 +29,7 @@ class CcbMonitor:
                     "product_points": 99999,
                     "card_type": ""}
         r = self.sess.get(target_url)
-        r.html.render(sleep=2, timeout=10000)
+        r.html.render(sleep=2, timeout=1000)
         try:
             res_dict["name"] = r.html.find('div.prd_top_info > p.prd_top_title', first=True).text
             res_dict["stock_quantity"] = int(r.html.find('#pint', first=True).text)
@@ -52,9 +52,10 @@ if __name__ == "__main__":
     for product in products:
         info = {'stock_quantity': 0}
         if product['enable']:
-            print("{0}的开始时间为{1}".format(product['name'], time.time()))
+            time_start = time.time()
+            print("{0}的开始时间为{1}".format(product['name'], time_start))
             info = bot.parser(product['url'])
-            print("{0}的结束时间为{1}".format(product['name'], time.time()))
+            print("{0}的运行时间为{1}s".format(product['name'], int(time.time() - time_start)))
         else:
             info['stock_quantity'] = -1
         if info['stock_quantity'] > product['threshold']:
