@@ -1,4 +1,2 @@
 requests-html
-python-telegram-bot
-urllib3<1.25
-websockets==6.0
+#urllib3<1.25
