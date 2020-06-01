@@ -1,6 +1,19 @@
+# -*- coding: utf-8 -*-
+"""
+-------------------------------------------------
+   File Name：     cgb
+   Description :
+   Author :       Vincent
+   date：          2020/4/20
+-------------------------------------------------
+   Change Activity:
+                   2020/4/20:
+-------------------------------------------------
+"""
 import os
 import json
 import time
+import logging
 
 from requests_html import HTMLSession
 from pyppeteer.errors import TimeoutError
@@ -8,15 +21,15 @@ from pyppeteer.errors import TimeoutError
 products = list()
 with open("config.json", 'r', encoding='UTF-8') as f:
     config = json.load(f)
-    products = list(filter(lambda x: x['type'] == 'ccb', config['products']))
+    products = list(filter(lambda x: x['type'] == 'cgb', config['products']))
 
 bark_key = os.environ.get("BARK_KEY")
 
 
-class CcbMonitor:
+class CgbMonitor:
 
     def __init__(self):
-        start_url = "http://jf.ccb.com/index.html"
+        start_url = "http://shop.cgbchina.com.cn/mall/integrate/zengzhi"
         self.sess = HTMLSession()
         self.sess.headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
@@ -32,8 +45,9 @@ class CcbMonitor:
         try:
             r = self.sess.get(target_url)
             r.html.render(sleep=2, timeout=60)
-            res_dict["name"] = r.html.find('div.prd_top_info > p.prd_top_title', first=True).text
-            res_dict["stock_quantity"] = int(r.html.find('#pint', first=True).text)
+            res_dict["name"] = r.html.find('div.product-detail-content-title', first=True).text
+            btn = r.html.find('div.product-detail-content-btn > a.js-buy', first=True)
+            res_dict["stock_quantity"] = btn
             res_dict["product_points"] = int(r.html.find('li.product-points > span', first=True).text)
             # 兑换卡种
             res_dict["card_type"] = r.html.find('li.card-type', first=True).text[6:]
@@ -47,8 +61,8 @@ class CcbMonitor:
 
 if __name__ == "__main__":
     # print(os.environ.get('PYPPETEER_DOWNLOAD_HOST'))
-    print('开始工作')
-    bot = CcbMonitor()
+    logging.info('开始工作')
+    bot = CgbMonitor()
     str1 = ''
     for product in products:
         info = {'stock_quantity': 0}
