@@ -1,19 +1,24 @@
 name: 积分商城监控
 
-on: 
+on:
   push:
     branches: master
   schedule:
     # * is a special character in YAML so you have to quote this string
-    - cron:  '15 0 * * *'
+    - cron:  '15 0 5-31 * *'
+    - cron:  '8 8-23/1 1-5 * *'
+  watch:
+    types: started
+
 jobs:
   ccb:
 
     runs-on: ubuntu-latest
+    if: github.event.repository.owner.id == github.event.sender.id
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Setup Python environment
+      - uses: actions/checkout@v2
+      - name: Setup Python environment
       uses: actions/setup-python@v1.1.1
       with:
         python-version: 3.7
