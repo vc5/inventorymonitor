@@ -24,7 +24,7 @@ jobs:
           python-version: 3.7
       - name: Install lib
         run: pip install -r ./requirements.txt
-      - name: run script
+      - name: run ccb script
         env:
           BARK_KEY: ${{ secrets.BARK_KEY }}
         run: python ccb.py

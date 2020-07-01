@@ -29,8 +29,8 @@ bark_key = os.environ.get("BARK_KEY")
 class CgbMonitor:
 
     def __init__(self):
-        start_url = "http://shop.cgbchina.com.cn/mall/integrate/zengzhi"
-        self.sess = HTMLSession()
+        start_url = "https://shop.cgbchina.com.cn/mall/integrate/zengzhi"
+        self.sess = HTMLSession(headless=True)
         self.sess.headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
                           'Chrome/79.0.3945.88 Safari/537.36 '
@@ -39,18 +39,18 @@ class CgbMonitor:
 
     def parser(self, target_url: str):
         res_dict = {"name": "",
-                    "stock_quantity": 0,
+                    "stock_quantity": 1,
                     "product_points": 99999,
                     "card_type": ""}
         try:
             r = self.sess.get(target_url)
-            r.html.render(sleep=2, timeout=60)
+            r.html.render(sleep=2, timeout=3)
             res_dict["name"] = r.html.find('div.product-detail-content-title', first=True).text
-            btn = r.html.find('div.product-detail-content-btn > a.js-buy', first=True)
-            res_dict["stock_quantity"] = btn
-            res_dict["product_points"] = int(r.html.find('li.product-points > span', first=True).text)
+            if r.html.find('div.product-detail-img-big>img.stock-zero', first=True) or \
+                    r.html.find('div.product-detail-content-btn >a.js-buy.bg-grey', first=True):
+                res_dict["stock_quantity"] = 0
+            # res_dict["product_points"] = int(r.html.find('li.product-points > span', first=True).text)
             # 兑换卡种
-            res_dict["card_type"] = r.html.find('li.card-type', first=True).text[6:]
         except (AttributeError, TimeoutError):
             pass
         return res_dict
@@ -60,7 +60,7 @@ class CgbMonitor:
 
 
 if __name__ == "__main__":
-    # print(os.environ.get('PYPPETEER_DOWNLOAD_HOST'))
+    #print(os.environ.get('PYPPETEER_DOWNLOAD_HOST'))
     logging.info('开始工作')
     bot = CgbMonitor()
     str1 = ''
@@ -71,10 +71,7 @@ if __name__ == "__main__":
             info = bot.parser(product['url'])
             print("{0}的运行时间为{1}s".format(product['name'], int(time.time() - time_start)))
         else:
-            info['stock_quantity'] = -1
-        if info['stock_quantity'] > product['threshold']:
-            str1 += "、{0}".format(product['name'])
-        # print("%s，剩余%s件" % (info['name'], info['stock_quantity']))
-    if str1 is not '':
-        bot.messager('建行库存更新', '{0}有货了'.format(str1[1:]))
-    print('结束工作')
+            info['stock_quantity'] = 0
+        if info['stock_quantity'] == 1:
+            bot.messager('DIY签账额有货了')
+    logging.info('结束工作')
