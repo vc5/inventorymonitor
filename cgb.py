@@ -30,7 +30,7 @@ class CgbMonitor:
 
     def __init__(self):
         start_url = "https://shop.cgbchina.com.cn/mall/integrate/zengzhi"
-        self.sess = HTMLSession(headless=True)
+        self.sess = HTMLSession()
         self.sess.headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
                           'Chrome/79.0.3945.88 Safari/537.36 '

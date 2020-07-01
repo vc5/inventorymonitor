@@ -1,17 +1,16 @@
-name: 建行积分商城监控
+name: 广发积分商城监控
 
 on:
   push:
     branches: master
   schedule:
     # * is a special character in YAML so you have to quote this string
-    - cron:  '15 0 5-31 * *'
-    - cron:  '*/10 0-15 1-5 * *'
+    - cron:  '15 */1 * * *'
   watch:
     types: started
 
 jobs:
-  ccb:
+  cgb:
 
     runs-on: ubuntu-latest
     if: github.event.repository.owner.id == github.event.sender.id
@@ -27,5 +26,5 @@ jobs:
       - name: run ccb script
         env:
           BARK_KEY: ${{ secrets.BARK_KEY }}
-        run: python ccb.py
+        run: python cgb.py
 
