@@ -44,13 +44,11 @@ class CgbMonitor:
                     "card_type": ""}
         try:
             r = self.sess.get(target_url)
-            r.html.render(sleep=2, timeout=3)
+            # r.html.render(sleep=60, timeout=10)
             res_dict["name"] = r.html.find('div.product-detail-content-title', first=True).text
-            if r.html.find('div.product-detail-img-big>img.stock-zero', first=True) or \
-                    r.html.find('div.product-detail-content-btn >a.js-buy.bg-grey', first=True):
+            if r.html.find('div.product-detail-img-big>img.stock-zero', first=True):
                 res_dict["stock_quantity"] = 0
             # res_dict["product_points"] = int(r.html.find('li.product-points > span', first=True).text)
-            # 兑换卡种
         except (AttributeError, TimeoutError):
             pass
         return res_dict
