@@ -14,6 +14,7 @@ jobs:
   ccb:
 
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     if: github.event.repository.owner.id == github.event.sender.id
 
     steps:
